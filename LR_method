@@ -1,0 +1,124 @@
+\documentclass{beamer}
+
+\mode<presentation>{
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usecolortheme{dolphin} 
+}
+\usepackage{graphicx} 
+\usepackage{booktabs} 
+
+
+\begin{document}
+
+\title{L$\And$R method for Frequency Synchronization}
+\author{Siddharth Maurya EE17BTECH11038\\
+    Sai Manasa Pappu EE17BTECH11036
+   } 
+   
+\date{February 2019}
+\maketitle
+
+
+
+\begin{frame}{Actual approximation part of L and R technique}
+Our primary aim was to implement L and R technique of frequency offset estimation.
+\bigbreak
+There are 2 parts in it, one using estimate and other as exact.
+\bigbreak
+Estimated part:
+\bigbreak
+$\Delta\hat{f}\widetilde{=} \frac{1}{\pi T_s(M+1)}arg(\sum_{k=1}^{M}R(k)) $
+\bigbreak
+This is true for small frequency offset , as what we observed , it is true until 800 Hz frequency offset.
+\bigbreak
+Condition on $\Delta\hat{f}$ :$ T_s$ must be grater than or equal to 1/2*$\Delta{f}$
+\bigbreak
+Condition on M: M*$\Delta{f}$*$ T_s$ $<<$ 1.
+
+\end{frame}
+
+\begin{frame}{Calculation of R(k)}
+R(k) is the auto correlation of our received signal r(k),which is complex oscillation with added gaussian noise.
+\bigbreak
+$R(k) \overset{\Delta}{=} \frac{1}{N-k}\sum_{i=k+1}^{N} r_{i}r^{*}_{i-k}$
+ , $1 \leq k \leq N-1$
+ \bigbreak
+ N $=$ length of signal r(k) i.e. received signal.
+ \bigbreak
+ The above expression is the auto correlation of received digital signal.
+
+\end{frame}
+\begin{frame}
+But because of the drawback that the frequency offset should be small (as what we observed , should be upto 800 Hz), we implemented the exact part for frequency offset estimation.
+\end{frame}
+
+\begin{frame}{Exact part}
+For large frequency offset , above estimation goes wrong.So we use the following.
+\bigbreak
+Exact part:
+\bigbreak
+$\Delta\hat{f}\widetilde{=} \frac{1}{2\pi T_s}\frac{\sum_{k=1}^{M}Im(R(k))}{\sum_{k=1}^{M}kRe(R(k))} $
+\bigbreak
+Constraints on M is same as previous.
+\bigbreak
+This yields a better approximation even for frequency offset as large as 40 MHz.
+
+\end{frame}
+
+\begin{frame}{Practical values of the parameters used}
+Signal Length N = 36
+\bigbreak
+frequency offset \Delta{f} =5MHz 
+\bigbreak
+Ts = 1e-9 .
+\bigbreak
+Fc = 25 GHz. (central frequency)
+\bigbreak
+But Fc isn't required anywhere in code.
+\bigbreak
+$M = \frac{N}{2} =18$
+\bigbreak
+%The Ts we took is = $10^{-9}$
+\end{frame}
+
+% \begin{frame}{Estimated freq offset vs actual offset for SNR = 5 units}
+%     \begin{figure}
+%         \centering
+%         \includegraphics[scale = 0.5]{forA=5.png}
+%         \label{fig:my_label}
+%     \end{figure}
+% \end{frame}
+
+ \begin{frame}{Error for SNR = 5 units}
+ Here, the frequency offset, $delta_f$, is varying from 0.1 to 40 MHz.
+     \begin{figure}
+         \centering
+         \includegraphics[scale = 0.5]{fixed_SNR5.png}
+         \label{fig:my_label}
+     \end{figure}
+    \bigbreak
+    Clearly, the error for our destined frequency offset, 5 MHz, is very low.
+ \end{frame}
+
+
+\begin{frame}{Error vs SNR for high frequency offsets/ practical offset}
+Here, frequency offset is fixed to be 5 MHz.
+\bigbreak
+    \begin{figure}
+        \centering
+        \includegraphics[scale = 0.5]{error_vs_snr.png}
+        \label{fig:my_label}
+    \end{figure}
+
+\bigbreak
+We can clearly see that the error is very very low for high SNR.
+\end{frame}
+\end{document}
+
+%Exact part:
+%\bigbreak
+%$\Delta\hat{f}\widetilde{=} \frac{\sum_{k=1}^M}             $
+%\frac{1}{2*$\Delta\hat{f}$}
